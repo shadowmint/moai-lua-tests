@@ -1,0 +1,7 @@
+#include <stdio.h>
+
+void main(int argc, char *argv[]) {
+  char *command = "@MOAI_BINARY_PATH@ @PROJECT_TARGET@";
+  printf("Executing: %s\n", command);
+  system(command);
+}

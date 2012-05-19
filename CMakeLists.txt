@@ -12,41 +12,43 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-## Constants
-set(PROJECT_NAME "LuaTest")
+cmake_minimum_required(VERSION 2.8)
 
-## Generated Constants
+# Project definition
+set(PROJECT_NAME "LuaTest")
 string(TOUPPER ${PROJECT_NAME} NS)
 string(TOLOWER ${PROJECT_NAME} ns)
-
-## Project definition
-cmake_minimum_required(VERSION 2.8)
 project(${NS})
 
-## Load cmake definitions
+# Constants
+set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
+
+# Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")
 foreach(PROJECT_INCLUDE ${PROJECT_INCLUDES})
   include(${PROJECT_INCLUDE})
 endforeach(PROJECT_INCLUDE ${PROJECT_INCLUDES})
 
-## Macros
-function(add_source_path DIR) 
-  file(GLOB_RECURSE FILES "${PROJECT_SOURCE_DIR}/${DIR}/*.lua")
-  foreach(FILE ${FILES})
-    string(REPLACE "${PROJECT_SOURCE_DIR}/${DIR}/" "" FILE_RELATIVE ${FILE})
-    string(REGEX REPLACE "/[^/]+$" "" FILE_RELATIVE_PATH ${FILE_RELATIVE})
-    set(FILE_ABSOLUTE "${PROJECT_BINARY_DIR}/${FILE_RELATIVE}")
+# Copy lua files into the build path
+copy_source_files("${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}")
 
-    # If there was actually a directory for that, create it.
-    if (NOT FILE_RELATIVE STREQUAL FILE_RELATIVE_PATH)
-      set(FILE_ABSOLUTE_PATH "${PROJECT_BINARY_DIR}/${FILE_RELATIVE_PATH}")
-      file(MAKE_DIRECTORY ${FILE_ABSOLUTE_PATH})
-    endif()
+# Create application runner for the 'main' application
+set(PROJECT_TARGET "main.lua")
+file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates")
+configure_file("${PROJECT_SOURCE_DIR}/cmake/runner.c.in" "${PROJECT_BINARY_DIR}/templates/runner.c")
+add_executable(${ns} "${PROJECT_BINARY_DIR}/templates/runner.c")
 
-    # Copy the file into the directory
-    file(READ ${FILE} FP)
-    file(WRITE ${FILE_ABSOLUTE} ${FP})
-  endforeach()
-endfunction()
+# Find tests
+file(GLOB_RECURSE TESTS tests/CMakeLists*)
 
-add_source_path("src")
+# Optional: build tests
+option(BUILD_TESTS "Build tests" ON)
+if(BUILD_TESTS)
+  if(TESTS)
+    enable_testing()
+    foreach(TEST ${TESTS})
+      string(REGEX REPLACE "CMakeLists.txt" "" TEST_DIR ${TEST})
+      add_subdirectory(${TEST_DIR})
+    endforeach(TEST)
+  endif(TESTS)
+endif(BUILD_TESTS)
