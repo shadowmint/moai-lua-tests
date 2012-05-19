@@ -1,0 +1,8 @@
+print(package.path)
+package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
+print(package.path)
+
+list = require "n/module"
+list.add("1", "2")
+list.print()
+require "junk"

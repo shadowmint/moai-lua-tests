@@ -15,6 +15,10 @@
 # Unique name for this test
 set(TEST_NAME "template")
 
+# Config
+set(TEST_TARGET "test.lua.in")
+set(TEST_PROJECT_TARGET "test.lua")
+
 # Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")
 foreach(PROJECT_INCLUDE ${PROJECT_INCLUDES})
@@ -24,8 +28,12 @@ endforeach(PROJECT_INCLUDE ${PROJECT_INCLUDES})
 # Copy lua files into the build path
 copy_source_files("${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}/tests/${TEST_NAME}")
 
+# Generate lua test file
+set(TEST_PACKAGE_PATH "${PROJECT_BINARY_DIR}/tests/${TEST_NAME}")
+set(TEST_PROJECT_TARGET "${TEST_PACKAGE_PATH}/${TEST_PROJECT_TARGET}")
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${TEST_TARGET}" "${TEST_PROJECT_TARGET}")
+
 # Create application runner for this test application
-set(TEST_PROJECT_TARGET "${PROJECT_BINARY_DIR}/tests/${TEST_NAME}/test.lua")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}")
 configure_file("${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in" "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
 add_executable("test-${TEST_NAME}" "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
