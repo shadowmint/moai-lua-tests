@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Unique name for this test
-set(TEST_NAME "template")
+set(TEST_NAME "fails")
 
 # Config
 set(TEST_TARGET "test.lua.in")

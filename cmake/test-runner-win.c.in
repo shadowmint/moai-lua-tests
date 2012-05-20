@@ -21,9 +21,14 @@
 int main(int argc, char *argv[]) {
   char *working_dir = "@PROJECT_BINARY_DIR@";
   char *command = "@MOAI_BINARY_PATH@ @TEST_PROJECT_TARGET@";
-  int rtn;
   printf("Executing: %s\n", command);
   _chdir(working_dir);
-  rtn = system(command);
-  return(rtn);
+  system(command);
+  FILE *fp = fopen("@TEST_OUTPUT_PATH@", "r");
+  if (fp == NULL)
+    return -1;
+  else {
+    fclose(fp);
+    return 0;
+  }
 }

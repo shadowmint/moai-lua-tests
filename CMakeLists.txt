@@ -27,7 +27,6 @@ if(APPLE)
 else()
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai.exe")
   set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner-win.c.in")
-message("WIN!")
 endif()
 
 # Load cmake definitions
