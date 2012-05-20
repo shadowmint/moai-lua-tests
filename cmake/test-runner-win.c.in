@@ -16,14 +16,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <direct.h>
 
 int main(int argc, char *argv[]) {
   char *working_dir = "@PROJECT_BINARY_DIR@";
   char *command = "@MOAI_BINARY_PATH@ @TEST_PROJECT_TARGET@";
   int rtn;
   printf("Executing: %s\n", command);
-  chdir(working_dir);
+  _chdir(working_dir);
   rtn = system(command);
   return(rtn);
 }

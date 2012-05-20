@@ -15,10 +15,12 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char *argv[]) {
   char *command = "@MOAI_BINARY_PATH@ @PROJECT_TARGET@";
+  int rtn;
   printf("Executing: %s\n", command);
-  system(command);
-  return 0;
+  rtn = system(command);
+  return rtn;
 }

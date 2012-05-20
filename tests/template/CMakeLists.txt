@@ -34,9 +34,10 @@ set(TEST_PROJECT_TARGET "${TEST_PACKAGE_PATH}/${TEST_PROJECT_TARGET}")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${TEST_TARGET}" "${TEST_PROJECT_TARGET}")
 
 # Create application runner for this test application
+set(TEST_SOURCE "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}")
-configure_file("${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in" "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
-add_executable("test-${TEST_NAME}" "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
+configure_file("${PROJECT_TEST_TEMPLATE}" "${TEST_SOURCE}")
+add_executable("test-${TEST_NAME}" "${TEST_SOURCE}")
 
 # This is a test
 add_test(${TEST_NAME} "${CMAKE_CURRENT_BINARY_DIR}/test-${TEST_NAME}")

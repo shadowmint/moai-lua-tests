@@ -21,7 +21,14 @@ string(TOLOWER ${PROJECT_NAME} ns)
 project(${NS})
 
 # Constants
-set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
+if(APPLE)
+  set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
+  set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
+else()
+  set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai.exe")
+  set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner-win.c.in")
+message("WIN!")
+endif()
 
 # Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")
