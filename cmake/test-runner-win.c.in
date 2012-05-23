@@ -17,18 +17,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <direct.h>
+#include <process.h>
+#include <errno.h>
+#include <string.h>
+
+char *argv[2];
+char buffer[1024];
+
+void run(char *command, char *arg);
+
+void run(char *command, char *arg) {
+
+  char *_command = strdup(command);
+  char *_arg = strdup(arg);
+
+  argv[0] = _command;
+  argv[1] = _arg;
+  printf("%s %s\n", _command, _arg);
+  if (_spawnv(_P_WAIT, _command, (const char * const *) argv) != 0) {
+    printf("Error: %s", strerror(errno));
+  }
+}
 
 int main(int argc, char *argv[]) {
-  char *working_dir = "@PROJECT_BINARY_DIR@";
-  char *command = "@MOAI_BINARY_PATH@ @TEST_PROJECT_TARGET@";
-  printf("Executing: %s\n", command);
-  _chdir(working_dir);
-  system(command);
-  FILE *fp = fopen("@TEST_OUTPUT_PATH@", "r");
-  if (fp == NULL)
-    return -1;
-  else {
-    fclose(fp);
-    return 0;
-  }
+
+  FILE *fp;
+  int rtn;
+
+  chdir("@PROJECT_BINARY_DIR@");
+  run("@MOAI_BINARY_PATH@", "@TEST_PROJECT_TARGET@");
+
+  fp = fopen("@TEST_OUTPUT_PATH@", "r");
+  rtn = fp == NULL ? 1 : 0;
+
+  (void) argc;
+  (void) argv;
+
+  return rtn;
 }

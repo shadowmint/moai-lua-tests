@@ -15,18 +15,27 @@
  */
 
 #include <stdio.h>
+#include <process.h>
 #include <stdlib.h>
 
-void run(char *command) {
-  printf("%s\n", command);
-  if (system(command) != 0) {
-    printf("ERROR: failed.");
-    exit(1);
-  }
+char *argv[2];
+
+void run(char *command, char *arg);
+
+void run(char *command, char *arg) {
+  printf("%s %s\n", command, arg);
+  argv[0] = command;
+  argv[1] = arg;
+  _spawnv(P_WAIT, command, (const char * const *) argv);
 }
 
 int main(int argc, char *argv[]) {
-  run("\"@CMAKE_COMMAND@\" \"@PROJECT_SOURCE_DIR@\"");
-  run("\"@MOAI_BINARY_PATH@\" \"@PROJECT_TARGET@\"");
+
+  run("@CMAKE_COMMAND@", "@PROJECT_SOURCE_DIR@");
+  run("@MOAI_BINARY_PATH@", "@PROJECT_TARGET@");
+
+  (void) argc;
+  (void) argv;
+
   return 0;
 }

@@ -18,17 +18,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-int main(int argc, char *argv[]) {
-  char *working_dir = "@PROJECT_BINARY_DIR@";
-  char *command = "@MOAI_BINARY_PATH@ @TEST_PROJECT_TARGET@";
-  printf("Executing: %s\n", command);
-  chdir(working_dir);
+void run(char *command) {
+  printf("%s\n", command);
   system(command);
+}
+
+int main(int argc, char *argv[]) {
+
+  chdir("@PROJECT_BINARY_DIR@");
+  run("\"@MOAI_BINARY_PATH@\" \"@TEST_PROJECT_TARGET@\"");
+
   FILE *fp = fopen("@TEST_OUTPUT_PATH@", "r");
-  if (fp == NULL)
-    return -1;
-  else {
-    fclose(fp);
-    return 0;
-  }
+  int rtn = fp == NULL ? 1 : 0;
+
+  return rtn;
 }
