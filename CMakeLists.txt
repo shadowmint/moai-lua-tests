@@ -20,13 +20,18 @@ string(TOUPPER ${PROJECT_NAME} NS)
 string(TOLOWER ${PROJECT_NAME} ns)
 project(${NS})
 
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_C_FLAGS "-Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra -Werror")
+
 # Constants
 if(APPLE)
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
   set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
+  set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner.c.in")
 else()
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai.exe")
   set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner-win.c.in")
+  set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner-win.c.in")
 endif()
 
 # Load cmake definitions
@@ -38,10 +43,13 @@ endforeach(PROJECT_INCLUDE ${PROJECT_INCLUDES})
 # Copy lua files into the build path
 copy_source_files("${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}")
 
+# Copy assets into the build path
+file(COPY "assets" DESTINATION "${PROJECT_BINARY_DIR}")
+
 # Create application runner for the 'main' application
 set(PROJECT_TARGET "main.lua")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates")
-configure_file("${PROJECT_SOURCE_DIR}/cmake/runner.c.in" "${PROJECT_BINARY_DIR}/templates/runner.c")
+configure_file("${PROJECT_RUNNER_TEMPLATE}" "${PROJECT_BINARY_DIR}/templates/runner.c")
 add_executable(${ns} "${PROJECT_BINARY_DIR}/templates/runner.c")
 
 # Find tests
