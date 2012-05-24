@@ -21,11 +21,12 @@ string(TOLOWER ${PROJECT_NAME} ns)
 project(${NS})
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "-Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra -Werror")
+set(CMAKE_C_FLAGS "-ansi -Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra -Werror")
 
 # Constants
 if(APPLE)
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
+  set(AUTO_IMPL "${PROJECT_SOURCE_DIR}/lib/impl/osx.c")
   set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
   set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner.c.in")
 else()
@@ -46,11 +47,20 @@ copy_source_files("${PROJECT_SOURCE_DIR}/src" "${PROJECT_BINARY_DIR}")
 # Copy assets into the build path
 file(COPY "assets" DESTINATION "${PROJECT_BINARY_DIR}")
 
+# Setup auto lib
+file(GLOB AUTO_SOURCES "${PROJECT_SOURCE_DIR}/lib/*.c")
+set(AUTO_SOURCES ${AUTO_SOURCES} ${AUTO_IMPL})
+add_library(auto ${AUTO_SOURCES})
+set(AUTO_LIBRARIES "auto")
+set(AUTO_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/lib")
+
 # Create application runner for the 'main' application
 set(PROJECT_TARGET "main.lua")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates")
 configure_file("${PROJECT_RUNNER_TEMPLATE}" "${PROJECT_BINARY_DIR}/templates/runner.c")
 add_executable(${ns} "${PROJECT_BINARY_DIR}/templates/runner.c")
+target_link_libraries(${ns} auto)
+include_directories(${AUTO_INCLUDE_DIR})
 
 # Find tests
 file(GLOB_RECURSE TESTS tests/CMakeLists*)
