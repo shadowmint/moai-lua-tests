@@ -1,17 +1,15 @@
-Moai lua unit test template example.
-----------------
+## Moai lua unit test template example.
 
+### To run tests on osx 
 
-** To run tests on osx **
-
-'''mkdir build
+`mkdir build
 cd build
 cmake ..
 make 
-make test'''
+make test`
 
 
-** To run tests on windows **
+### To run tests on windows 
 
 * mkdir build
 * cd build
@@ -22,6 +20,6 @@ make test'''
 ...or if you have a copy of visual studio, just use the cmake-gui and then choose 'build' on the ALL_TESTS project.
 
 
-** Notes **
+**Notes**
 
 This COPIES the lua sources into the build directory. This is not ideal, as it means you have to run cmake every time you want to run your test suite.
