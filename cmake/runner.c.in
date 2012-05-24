@@ -17,6 +17,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void run(char *command);
+
 void run(char *command) {
   printf("%s\n", command);
   if (system(command) != 0) {
@@ -28,5 +30,9 @@ void run(char *command) {
 int main(int argc, char *argv[]) {
   run("\"@CMAKE_COMMAND@\" \"@PROJECT_SOURCE_DIR@\"");
   run("\"@MOAI_BINARY_PATH@\" \"@PROJECT_TARGET@\"");
+
+  (void) argc;
+  (void) argv;
+
   return 0;
 }

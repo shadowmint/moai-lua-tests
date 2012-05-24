@@ -18,6 +18,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+void run(char *command);
+
 void run(char *command) {
   printf("%s\n", command);
   system(command);
@@ -25,11 +27,17 @@ void run(char *command) {
 
 int main(int argc, char *argv[]) {
 
+  FILE *fp;
+  int rtn;
+
   chdir("@PROJECT_BINARY_DIR@");
   run("\"@MOAI_BINARY_PATH@\" \"@TEST_PROJECT_TARGET@\"");
 
-  FILE *fp = fopen("@TEST_OUTPUT_PATH@", "r");
-  int rtn = fp == NULL ? 1 : 0;
+  fp = fopen("@TEST_OUTPUT_PATH@", "r");
+  rtn = fp == NULL ? 1 : 0;
+
+  (void) argc;
+  (void) argv;
 
   return rtn;
 }

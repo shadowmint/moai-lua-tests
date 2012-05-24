@@ -21,7 +21,7 @@
 #include <errno.h>
 #include <string.h>
 
-char *argv[2];
+char *argv[3];
 char buffer[1024];
 
 void run(char *command, char *arg);
@@ -33,6 +33,7 @@ void run(char *command, char *arg) {
 
   argv[0] = _command;
   argv[1] = _arg;
+  argv[2] = NULL;
   printf("%s %s\n", _command, _arg);
   if (_spawnv(_P_WAIT, _command, (const char * const *) argv) != 0) {
     printf("Error: %s", strerror(errno));
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
   int rtn;
 
   chdir("@PROJECT_BINARY_DIR@");
-  run("@MOAI_BINARY_PATH@", "@TEST_PROJECT_TARGET@");
+  run("@MOAI_BINARY_PATH@", "\"@TEST_PROJECT_TARGET@\"");
 
   fp = fopen("@TEST_OUTPUT_PATH@", "r");
   rtn = fp == NULL ? 1 : 0;
