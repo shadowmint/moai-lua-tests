@@ -40,7 +40,7 @@ void run(char *command, char *arg) {
   printf("%s %s\n", _command, _arg);
   handle = (HANDLE) _spawnv(_P_NOWAIT, _command, (const char * const *) argv);
 
-  /* Tests should take very long. Kill that process! */
+  /* Tests shouldnt take very long. Kill that process! */
   Sleep(500);
   TerminateProcess(handle, 0);
 }
