@@ -1,22 +1,21 @@
 Moai lua unit test template example.
-===================================
-
-To run lua tests:
 ----------------
 
-mkdir build
-cd build
-cmake ..
-make 
-make test
+To run lua tests:
+
+* mkdir build
+* cd build
+* cmake ..
+* make 
+* make test
 
 On windows:
 
-mkdir build
-cd build
-cmake .. -G "MSYS Makefiles"
-make
-make test
+* mkdir build
+* cd build
+* cmake .. -G "MSYS Makefiles"
+* make
+* make test
 
 ...or if you have a copy of visual studio, just use the cmake-gui and then choose 'build' on the ALL_TESTS project.
 
