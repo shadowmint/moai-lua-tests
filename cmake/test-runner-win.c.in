@@ -20,6 +20,8 @@
 #include <process.h>
 #include <errno.h>
 #include <string.h>
+#include <Windows.h>
+#include <unistd.h>
 
 char *argv[3];
 char buffer[1024];
@@ -30,14 +32,17 @@ void run(char *command, char *arg) {
 
   char *_command = strdup(command);
   char *_arg = strdup(arg);
+  HANDLE *handle;
 
   argv[0] = _command;
   argv[1] = _arg;
   argv[2] = NULL;
   printf("%s %s\n", _command, _arg);
-  if (_spawnv(_P_WAIT, _command, (const char * const *) argv) != 0) {
-    printf("Error: %s", strerror(errno));
-  }
+  handle = (HANDLE) _spawnv(_P_NOWAIT, _command, (const char * const *) argv);
+
+  /* Tests should take very long. Kill that process! */
+  Sleep(500);
+  TerminateProcess(handle, 0);
 }
 
 int main(int argc, char *argv[]) {
