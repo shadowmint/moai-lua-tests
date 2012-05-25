@@ -37,6 +37,16 @@ return function(_name, _done, _success)
   -- Currently running test
   local currentTest = nil
 
+  -- Assert some value is false
+  -- @param value The value that should be false
+  -- @param message The error to display if not false
+  pubTester.isFalse = function(value, message)
+    if value then
+      currentTest.errorCount = currentTest.errorCount + 1
+      table.insert(currentTest.errors, message)
+    end
+  end
+
   -- Assert some value is true
   -- @param value The value that should be true
   -- @param message The error to display if not true
@@ -93,7 +103,7 @@ return function(_name, _done, _success)
           failed = true
         end
       else
-        print(name .. " passed")
+        print(v.name .. " passed")
       end
     end
     if (not failed) then

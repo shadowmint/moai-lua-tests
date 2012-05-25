@@ -125,6 +125,12 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
   _api.disableInput = function() 
     MOAIInputMgr.device.keyboard:setCallback(nil)
   end
+
+  -- Destroy self
+  api.destroy = function() 
+    layer:clear()
+    MOAISim:removeRenderPass(layer)
+  end
   
   -- Handle arbitrary event commands
   api.handle = function(cmd) 
@@ -177,7 +183,6 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
 
   -- Hide the layer
   api.hide = function() 
-    print(layer)
     layer:clear()
     if (visible) then
       visible = false

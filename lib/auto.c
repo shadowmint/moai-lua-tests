@@ -110,5 +110,8 @@ int auto_run_moai_test (char *path, char *done_path, char *success_path, int tim
     fclose(fp);
   }
 
+  auto_trace("\nKilling moai to complete test run.\n");
+  auto_kill(handle);
+
   return success;
 }

@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 
+#include <auto/tools.h>
+#include <auto/impl.h>
+
 #ifndef AUTO_
 #define AUTO_
 

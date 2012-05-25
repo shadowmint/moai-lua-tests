@@ -4,8 +4,15 @@ package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
 test_factory = require "n/test"
 test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
 
--- Import actual tests
-require "tests"
+-- Test 1
+test.bind("example_test", function(t)
+  t.isTrue(true, "True is true")
+end)
+
+-- Test 2
+test.bind("example_test_2", function(t)
+  t.isTrue(true, "True is true")
+end)
 
 -- Done
 test.verify()

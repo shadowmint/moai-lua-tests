@@ -1,4 +1,79 @@
 package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
-os.remove("@TEST_OUTPUT_PATH@")
-test = require "tests"
-test.done("@TEST_OUTPUT_PATH@")
+
+-- Setup
+test_factory = require "n/test"
+test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
+MOAISim.openWindow ("test", 512, 512)
+
+-- Instance
+function setup() 
+  local factory = require "n/terminal"
+  local terminal = factory(512, 512, "assets/Roboto-Medium.ttf", 14, 10)
+  return terminal
+end
+
+-- Teardown
+function teardown(terminal) 
+  terminal.destroy()
+end
+
+-- Check we can create an instance
+test.bind("test_can_import_terminal", function(t) 
+  local factory = require "n/terminal"
+  t.isFalse(factory == nil, "Unable to import factory")
+end, "Unable to import terminal factory")
+
+-- Check we can create a terminal instance
+test.bind("test_can_create_instance", function(t) 
+  local factory = require "n/terminal"
+  local terminal = factory(512, 512, "assets/Roboto-Medium.ttf", 14, 10)
+  t.isFalse(terminal == nil, "Unable to create instance")
+  terminal.destroy()
+end, "Unable to create terminal instance")
+
+-- Check we can log to the terminal
+test.bind("test_can_trace_messages", function(t) 
+  local terminal = setup()
+  terminal.trace("Hello World 1")
+  terminal.trace("Hello World 2")
+  terminal.trace("Hello World 3")
+  terminal.trace("Hello World 4")
+  terminal.trace("Hello World 5")
+  teardown(terminal)
+end)
+
+-- Check we can hide the terminal
+test.bind("test_can_hide_terminal", function(t)
+  local terminal = setup()
+  terminal.hide()
+  teardown(terminal)
+end)
+
+-- Check we can show the terminal
+test.bind("test_can_show_terminal", function(t) 
+  local terminal = setup()
+  terminal.show()
+  teardown(terminal)
+end)
+
+-- Check we can attach a terminal command and run it
+test.bind("test_can_invoke_action", function(t)
+  local terminal = setup()
+
+  terminal.show()
+  local success = false
+
+  -- Attach handler
+  terminal.attach("RUN", function() 
+    success = true
+  end)
+
+  -- Try to invoke
+  terminal.handle("RUN")
+  t.isTrue(success)
+
+  teardown(terminal)
+end)
+
+-- Done
+test.verify()

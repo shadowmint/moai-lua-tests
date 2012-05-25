@@ -18,7 +18,6 @@ set(TEST_NAME "template")
 # Config
 set(TEST_TARGET "test.lua.in")
 set(TEST_PROJECT_TARGET "test.lua")
-set(TEST_PROJECT_RUNNER "tests.lua")
 
 # Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")

@@ -31,7 +31,8 @@ copy_source_files("${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_BINARY_DIR}/tests/${T
 # Generate lua test file
 set(TEST_PACKAGE_PATH "${PROJECT_BINARY_DIR}/tests/${TEST_NAME}")
 set(TEST_PROJECT_TARGET "${TEST_PACKAGE_PATH}/${TEST_PROJECT_TARGET}")
-set(TEST_OUTPUT_PATH "${TEST_PACKAGE_PATH}/${TEST_NAME}_success.txt")
+set(TEST_SUCCESS_PATH "${TEST_PACKAGE_PATH}/${TEST_NAME}_success.txt")
+set(TEST_DONE_PATH "${TEST_PACKAGE_PATH}/${TEST_NAME}_done.txt")
 configure_file("${CMAKE_CURRENT_SOURCE_DIR}/${TEST_TARGET}" "${TEST_PROJECT_TARGET}")
 
 # Create application runner for this test application
