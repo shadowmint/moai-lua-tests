@@ -1,6 +1,6 @@
 -- Setup
 test_factory = require "n/test"
-test = test_factory("Hello World")
+test = test_factory("Hello World", ".done.txt", ".success.txt")
 
 test.bind("test_hello", function(t)
   t.isTrue(1 == 1, "Check: 1 == 1")

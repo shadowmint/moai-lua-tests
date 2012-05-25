@@ -1,5 +1,5 @@
 -- Testing helper
-return function(_name)
+return function(_name, _done, _success)
    
   -- Check args
   local verify = function(name, value)
@@ -10,6 +10,8 @@ return function(_name)
     return false
   end
   if verify("_name", _name) then return nil end
+  if verify("_done", _done) then return nil end
+  if verify("_success", _success) then return nil end
 
   -- api
   local pub = {}
@@ -19,6 +21,12 @@ return function(_name)
 
   -- Name of this test set
   local name = _name
+
+  -- Create this file when we're done
+  local donePath = _done
+
+  -- Create this file on success
+  local successPath = _success
 
   -- Set of all tests 
   local tests = {}
@@ -60,10 +68,11 @@ return function(_name)
   end
 
   -- Run all the tests and report back about how they went
-  pub.verify = function(result_file) 
+  pub.verify = function() 
 
     -- Cleanup success marker
-    os.remove(result_file)
+    os.remove(donePath)
+    os.remove(successPath)
 
     -- Run tests
     print("\nRunning tests: " .. name)
@@ -95,13 +104,15 @@ return function(_name)
 
     -- Generate test result file
     if (not failed) then
-      local fp = io.open(result_file, "w")
+      local fp = io.open(successPath, "w")
       fp:write("Success")
       fp:close()
     end
 
     -- Done
-    error("Error to exit test suite!")
+    local fp = io.open(donePath, "w")
+    fp:write("Done")
+    fp:close()
   end
 
   -- Pass out API
