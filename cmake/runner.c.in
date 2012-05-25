@@ -16,20 +16,23 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <auto/auto.h>
 
-void run(char *command);
+void init(void);
 
-void run(char *command) {
-  printf("%s\n", command);
-  if (system(command) != 0) {
-    printf("ERROR: failed.");
-    exit(1);
-  }
+void init(void) {
+  auto_init(AUTO_MOAI_BINARY, "@MOAI_BINARY_PATH@");
+  auto_init(AUTO_PROJECT_BINARY_DIR, "@PROJECT_BINARY_DIR@");
+  auto_init(AUTO_PROJECT_SOURCE_DIR, "@PROJECT_SOURCE_DIR@");
+  auto_init(AUTO_CMAKE_BINARY, "@CMAKE_COMMAND@");
 }
 
 int main(int argc, char *argv[]) {
-  run("\"@CMAKE_COMMAND@\" \"@PROJECT_SOURCE_DIR@\"");
-  run("\"@MOAI_BINARY_PATH@\" \"@PROJECT_TARGET@\"");
+
+  init();
+  auto_rebuild();
+  auto_run_moai("@PROJECT_TARGET@");
+  auto_trace("\nDone.\n");
 
   (void) argc;
   (void) argv;

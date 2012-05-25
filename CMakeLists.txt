@@ -21,7 +21,7 @@ string(TOLOWER ${PROJECT_NAME} ns)
 project(${NS})
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "-ansi -Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra -Werror")
+set(CMAKE_C_FLAGS "-ansi -Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra")
 
 # Constants
 if(APPLE)

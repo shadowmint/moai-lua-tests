@@ -52,13 +52,23 @@ void auto_init(int id, char *value) {
 
 /** Run a moai script */
 void auto_run_moai (char *path) {
+  auto_trace("\nExecuting moai binary...\n");
+
+  auto_trace("chdir %s\n", _AUTO_PROJECT_BINARY_DIR);
   auto_chdir(_AUTO_PROJECT_BINARY_DIR);
+
+  auto_trace("%s %s\n", _AUTO_MOAI_BINARY, path);
   auto_exec_wait(_AUTO_MOAI_BINARY, path, NULL);
 }
 
 /** Update the binary directory from the source */
 void auto_rebuild(void) {
+  auto_trace("\nRebuilding configuration...\n");
+  
+  auto_trace("chdir %s\n", _AUTO_PROJECT_BINARY_DIR);
   auto_chdir(_AUTO_PROJECT_BINARY_DIR);
+
+  auto_trace("%s %s\n", _AUTO_CMAKE_BINARY, _AUTO_PROJECT_SOURCE_DIR);
   auto_exec(_AUTO_CMAKE_BINARY, _AUTO_PROJECT_SOURCE_DIR, NULL);
 }
 
