@@ -99,9 +99,13 @@ int auto_run_moai_test (char *path, char *done_path, char *success_path, int tim
     elapsed += _AUTO_POLL_PERIOD;
     fp = fopen(done_path, "r");
     if (fp != NULL) {
+      auto_trace("\nTests completed.\n");
       fclose(fp);
       break;
     }
+  }
+  if (elapsed >= timeout) {
+    auto_trace("\nTimed out waiting for tests to complete. Failing.\n");
   }
 
   fp = fopen(success_path, "r");

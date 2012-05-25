@@ -47,7 +47,7 @@ void auto_remove(char *path) {
 
 /** Sleep for a specified number of microseconds */
 void auto_sleep(int usec) {
-  usleep(usec);
+  usleep(usec * 1000);
 }
 
 /** Collect arguments */
