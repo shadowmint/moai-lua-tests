@@ -80,10 +80,19 @@ int auto_run_moai_test (char *path, char *done_path, char *success_path, int tim
   int elapsed = 0;
   int success = 0;
 
+  auto_trace("\nRunning test...\n");
+
+  auto_trace("chdir %s\n", _AUTO_PROJECT_BINARY_DIR);
   auto_chdir(_AUTO_PROJECT_BINARY_DIR);
+
+  auto_trace("remove %s\n", done_path);
   auto_remove(done_path);
+
+  auto_trace("remove %s\n", success_path);
   auto_remove(success_path);
-  handle = auto_exec(_AUTO_CMAKE_BINARY, path, NULL);
+
+  auto_trace("%s %s\n", _AUTO_MOAI_BINARY, path);
+  handle = auto_exec(_AUTO_MOAI_BINARY, path, NULL);
 
   while((elapsed < timeout) || (timeout == -1)) {
     auto_sleep(_AUTO_POLL_PERIOD);

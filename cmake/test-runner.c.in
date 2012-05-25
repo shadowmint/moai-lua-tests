@@ -17,24 +17,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <auto/auto.h>
+#include <auto/impl.h>
 
-void run(char *command);
+void init(void);
 
-void run(char *command) {
-  printf("%s\n", command);
-  system(command);
+void init(void) {
+  auto_init(AUTO_MOAI_BINARY, "@MOAI_BINARY_PATH@");
+  auto_init(AUTO_PROJECT_BINARY_DIR, "@PROJECT_BINARY_DIR@");
+  auto_init(AUTO_PROJECT_SOURCE_DIR, "@PROJECT_SOURCE_DIR@");
+  auto_init(AUTO_CMAKE_BINARY, "@CMAKE_COMMAND@");
 }
 
 int main(int argc, char *argv[]) {
 
-  FILE *fp;
   int rtn;
 
-  chdir("@PROJECT_BINARY_DIR@");
-  run("\"@MOAI_BINARY_PATH@\" \"@TEST_PROJECT_TARGET@\"");
-
-  fp = fopen("@TEST_OUTPUT_PATH@", "r");
-  rtn = fp == NULL ? 1 : 0;
+  init();
+  rtn = !auto_run_moai_test("@TEST_PROJECT_RUNNER@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@", 5000);
+  auto_trace("\nDone.\n");
 
   (void) argc;
   (void) argv;

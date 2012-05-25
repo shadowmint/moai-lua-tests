@@ -1,4 +1,11 @@
 package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
-os.remove("@TEST_OUTPUT_PATH@")
-test = require "tests"
-test.done("@TEST_OUTPUT_PATH@")
+
+-- Setup
+test_factory = require "n/test"
+test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
+
+-- Import actual tests
+require "tests"
+
+-- Done
+test.verify()

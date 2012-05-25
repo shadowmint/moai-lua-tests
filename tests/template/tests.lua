@@ -1,4 +1,7 @@
-test = require "helpers/test"
-test.assert(true, "True is not true")
--- test.assert(false, "Failing test fails")
-return test
+local test = _G["test"]
+
+-- Example
+test.bind("example_test", function(t)
+  t.isTrue(true, "True is true")
+  t.isTrue(false, "False is true?")
+end)

@@ -59,7 +59,7 @@ set(PROJECT_TARGET "main.lua")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates")
 configure_file("${PROJECT_RUNNER_TEMPLATE}" "${PROJECT_BINARY_DIR}/templates/runner.c")
 add_executable(${ns} "${PROJECT_BINARY_DIR}/templates/runner.c")
-target_link_libraries(${ns} auto)
+target_link_libraries(${ns} ${AUTO_LIBRARIES})
 include_directories(${AUTO_INCLUDE_DIR})
 
 # Find tests
