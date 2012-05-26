@@ -12,23 +12,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+## Copy a single source file to a single target file. 
+function(copy_file DIR DEST TARGET COPY) 
+  string(REPLACE "${DIR}/" "" FILE_RELATIVE ${TARGET})
+  string(REGEX REPLACE ".in$" "" FILE_RELATIVE ${FILE_RELATIVE})
+  string(REGEX REPLACE "/[^/]+$" "" FILE_RELATIVE_PATH ${FILE_RELATIVE})
+  set(FILE_ABSOLUTE "${DEST}/${FILE_RELATIVE}")
+
+  # If there was actually a directory for that, create it.
+  if (NOT FILE_RELATIVE STREQUAL FILE_RELATIVE_PATH)
+    set(FILE_ABSOLUTE_PATH "${DEST}/${FILE_RELATIVE_PATH}")
+    file(MAKE_DIRECTORY ${FILE_ABSOLUTE_PATH})
+  endif()
+
+  # Copy the file into the directory
+  if (${COPY}) 
+    configure_file(${TARGET} ${FILE_ABSOLUTE} COPYONLY)
+  else()
+    configure_file(${TARGET} ${FILE_ABSOLUTE})
+  endif()
+endfunction()
+
 ## Copy all source files into the build directory
 # @param DIR The directory to search for source files in.
 # @param DEST The base directory to copy files to.
 function(copy_source_files DIR DEST) 
   file(GLOB_RECURSE FILES "${DIR}/*.lua")
   foreach(FILE ${FILES})
-    string(REPLACE "${DIR}/" "" FILE_RELATIVE ${FILE})
-    string(REGEX REPLACE "/[^/]+$" "" FILE_RELATIVE_PATH ${FILE_RELATIVE})
-    set(FILE_ABSOLUTE "${DEST}/${FILE_RELATIVE}")
-
-    # If there was actually a directory for that, create it.
-    if (NOT FILE_RELATIVE STREQUAL FILE_RELATIVE_PATH)
-      set(FILE_ABSOLUTE_PATH "${DEST}/${FILE_RELATIVE_PATH}")
-      file(MAKE_DIRECTORY ${FILE_ABSOLUTE_PATH})
-    endif()
-
-    # Copy the file into the directory
-    configure_file(${FILE} ${FILE_ABSOLUTE} COPYONLY)
+    copy_file(${DIR} ${DEST} ${FILE} 1)
+  endforeach()
+  file(GLOB_RECURSE FILES "${DIR}/*.lua.in")
+  foreach(FILE ${FILES})
+    copy_file(${DIR} ${DEST} ${FILE} 0)
   endforeach()
 endfunction()

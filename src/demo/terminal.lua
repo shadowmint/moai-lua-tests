@@ -21,6 +21,16 @@ terminal.attach("help", "show help message", function()
   terminal.help()
 end)
 
+-- Print an environment variable
+terminal.attach("env", "print an environment variable", function(args) 
+  if args[2] then
+    local value = MOAIEnvironment[args[2]]
+    terminal.trace(": " .. tostring(value))
+  else
+    terminal.trace("Usage: env [TARGET]")
+  end
+end)
+
 -- Close terminal
 terminal.attach("exit", "close terminal", function() 
   terminal.hide()

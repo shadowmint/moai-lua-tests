@@ -130,6 +130,19 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
     end
   end
 
+  -- Exploder
+  -- credit: http://richard.warburton.it
+  _api.explode = function(str)
+    local div = " "
+    local pos,arr = 0,{}
+    for st,sp in function() return string.find(str,div,pos,true) end do
+      table.insert(arr,string.sub(str,pos,st-1)) -- Attach chars left of current divider
+      pos = sp + 1 -- Jump past current divider
+    end
+    table.insert(arr,string.sub(str,pos)) -- Attach chars right of last divider
+    return arr
+  end
+
   -- Enable keyboard listener
   _api.enableInput = function() 
     MOAIInputMgr.device.keyboard:setCallback(_api.handleInput)
@@ -149,10 +162,11 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
   -- Handle arbitrary event commands
   api.handle = function(cmd) 
     success = false
+    args = _api.explode(cmd)
     for k,v in pairs(commands) do
-      if (k == cmd) then
+      if (k == args[1]) then
         api.trace("Running: " .. cmd)
-        v.command()
+        v.command(args)
         success = true
         break
       end

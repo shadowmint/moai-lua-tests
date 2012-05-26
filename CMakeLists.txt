@@ -36,6 +36,7 @@ else()
 endif()
 set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
 set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner.c.in")
+set(PROJECT_CONFIG_PATH "${PROJECT_SOURCE_DIR}/data/config.json")
 
 # Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")
