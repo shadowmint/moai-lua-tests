@@ -18,7 +18,7 @@ return function(_name, _done, _success)
   -- Check args
   local verify = function(name, value)
     if (value == nil) then
-      print("Tests: Invalid argument: " .. name)
+      print("Test: Invalid argument: " .. name)
       return true
     end
     return false

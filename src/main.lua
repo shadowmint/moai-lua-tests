@@ -16,4 +16,4 @@
 MOAISim.openWindow ( "test", 512, 512 )
 
 -- Open debug terminal
-require "demo/terminal"
+require "demo/Terminal"
