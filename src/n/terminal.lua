@@ -1,3 +1,17 @@
+-- Copyright 2012 Douglas Linder
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--     http://www.apache.org/licenses/LICEnsE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIOns OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 -- Terminal emulator
 -- @param _width The width in units for the text area.
 -- @param _height The height in units for the text area.
@@ -138,7 +152,7 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
     for k,v in pairs(commands) do
       if (k == cmd) then
         api.trace("Running: " .. cmd)
-        v()
+        v.command()
         success = true
         break
       end
@@ -149,8 +163,12 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
   end
 
   -- Attach a command to the terminal
-  api.attach = function(trigger, command) 
-    commands[trigger] = command
+  api.attach = function(trigger, help, command) 
+    commands[trigger] = {
+      ["command"] = command,
+      ["help"] = help,
+      ["trigger"] = trigger
+    }
   end
 
   -- Print a line to the terminal
@@ -178,6 +196,13 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
     if (not visible) then
       visible = true
       _api.enableInput()
+    end
+  end
+
+  -- Show help message~
+  api.help = function() 
+    for k, v in pairs(commands) do
+      api.trace(v.trigger .. ": " .. v.help)
     end
   end
 

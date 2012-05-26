@@ -64,13 +64,28 @@ test.bind("test_can_invoke_action", function(t)
   local success = false
 
   -- Attach handler
-  terminal.attach("RUN", function() 
+  terminal.attach("RUN", "sample action", function() 
     success = true
   end)
 
   -- Try to invoke
   terminal.handle("RUN")
   t.isTrue(success)
+
+  teardown(terminal)
+end)
+
+-- Check we can run help
+test.bind("test_can_run_help", function(t)
+  local terminal = setup()
+
+  -- Attach handler
+  terminal.attach("RUN", "sample action", function() success = true; end)
+  terminal.attach("RUN2", "sample action", function() success = true; end)
+
+  -- Try to invoke
+  terminal.show()
+  terminal.help()
 
   teardown(terminal)
 end)

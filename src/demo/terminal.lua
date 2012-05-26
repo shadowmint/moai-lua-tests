@@ -13,7 +13,19 @@
 -- limitations under the License.
 
 -- Setup
-MOAISim.openWindow ( "test", 512, 512 )
+terminal_factory = require "n/terminal"
+terminal = terminal_factory(512, 512, "assets/Roboto-Medium.ttf", 13, 30)
 
--- Open debug terminal
-require "demo/terminal"
+-- Help message
+terminal.attach("help", "show help message", function() 
+  terminal.help()
+end)
+
+-- Close terminal
+terminal.attach("exit", "close terminal", function() 
+  terminal.hide()
+end)
+
+-- GO!
+terminal.trace("debug terminal. Type 'help' for help.")
+terminal.show()
