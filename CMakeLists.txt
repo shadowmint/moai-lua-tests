@@ -21,19 +21,21 @@ string(TOLOWER ${PROJECT_NAME} ns)
 project(${NS})
 
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_C_FLAGS "-ansi -Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra")
+option(BUILD_WARNINGS "Build warnings" ON)
+if(BUILD_WARNINGS)
+  set(CMAKE_C_FLAGS "-ansi -Wall -pedantic -Wimplicit-function-declaration -Wreturn-type -Wstrict-prototypes -Wextra")
+endif(BUILD_WARNINGS)
 
 # Constants
 if(APPLE)
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai")
   set(AUTO_IMPL "${PROJECT_SOURCE_DIR}/lib/impl/osx.c")
-  set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
-  set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner.c.in")
 else()
   set(MOAI_BINARY_PATH "${PROJECT_SOURCE_DIR}/bin/moai.exe")
-  set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner-win.c.in")
-  set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner-win.c.in")
+  set(AUTO_IMPL "${PROJECT_SOURCE_DIR}/lib/impl/win.c")
 endif()
+set(PROJECT_TEST_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/test-runner.c.in")
+set(PROJECT_RUNNER_TEMPLATE "${PROJECT_SOURCE_DIR}/cmake/runner.c.in")
 
 # Load cmake definitions
 file(GLOB_RECURSE PROJECT_INCLUDES "${PROJECT_SOURCE_DIR}/cmake/*.cmake")

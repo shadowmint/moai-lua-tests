@@ -16,7 +16,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <auto/auto.h>
 #include <auto/impl.h>
 
@@ -34,7 +33,7 @@ int main(int argc, char *argv[]) {
   int rtn;
 
   init();
-  rtn = !auto_run_moai_test("@TEST_PROJECT_TARGET@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@", 5000);
+  rtn = !auto_run_moai_test("@TEST_PROJECT_TARGET@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@", 60000);
   auto_trace("\nDone.\n");
 
   (void) argc;

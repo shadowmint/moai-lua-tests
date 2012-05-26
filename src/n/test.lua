@@ -43,7 +43,7 @@ return function(_name, _done, _success)
   pubTester.isFalse = function(value, message)
     if value then
       currentTest.errorCount = currentTest.errorCount + 1
-      table.insert(currentTest.errors, message)
+      table.insert(currentTest.errors, message .. " (expected false)")
     end
   end
 
@@ -53,7 +53,49 @@ return function(_name, _done, _success)
   pubTester.isTrue = function(value, message)
     if not value then
       currentTest.errorCount = currentTest.errorCount + 1
-      table.insert(currentTest.errors, message)
+      table.insert(currentTest.errors, message .. " (expected true)")
+    end
+  end
+  
+  -- Assert two values are not equal
+  -- @param actual The actual value
+  -- @param not_expected The value we expected not to get
+  -- @param message The error to display if not true
+  pubTester.isNotEqual = function(actual, not_expected, message)
+    if actual == not_expected then
+      currentTest.errorCount = currentTest.errorCount + 1
+      table.insert(currentTest.errors, message .. " (expected anything but " .. not_expected .. ")")
+    end
+  end
+
+  -- Assert two values are equal
+  -- @param actual The actual value
+  -- @param expected The expected value
+  -- @param message The error to display if not true
+  pubTester.isEqual = function(actual, expected, message)
+    if actual ~= expected then
+      currentTest.errorCount = currentTest.errorCount + 1
+      table.insert(currentTest.errors, message .. " (expected " .. expected .. " but got " .. actual .. ")")
+    end
+  end
+
+  -- Assert value is nil
+  -- @param value The actual value
+  -- @param message The error to display if not true
+  pubTester.isNull = function(value, message)
+    if value ~= nil then
+      currentTest.errorCount = currentTest.errorCount + 1
+      table.insert(currentTest.errors, message .. " (expected nil but got " .. tostring(value) .. ")")
+    end
+  end
+
+  -- Assert two values are equal
+  -- @param value The actual value
+  -- @param message The error to display if not true
+  pubTester.isNotNull = function(value, message)
+    if value == nil then
+      currentTest.errorCount = currentTest.errorCount + 1
+      table.insert(currentTest.errors, message .. " (expected not nil)")
     end
   end
 
@@ -80,6 +122,9 @@ return function(_name, _done, _success)
   -- Run all the tests and report back about how they went
   pub.verify = function() 
 
+    -- Force output
+    io.stdout:setvbuf("no")
+
     -- Cleanup success marker
     os.remove(donePath)
     os.remove(successPath)
@@ -95,6 +140,7 @@ return function(_name, _done, _success)
 
     -- Print summary
     print("\nTest summary:")
+    failed_tests = 0
     for k, v in pairs(tests) do
       if (v.errorCount > 0) then
         print("\n" .. v.name .. " failed with " .. v.errorCount .. " errors")
@@ -102,6 +148,7 @@ return function(_name, _done, _success)
           print("- " .. ev)
           failed = true
         end
+        failed_tests = failed_tests + 1
       else
         print(v.name .. " passed")
       end
@@ -123,6 +170,8 @@ return function(_name, _done, _success)
     local fp = io.open(donePath, "w")
     fp:write("Done")
     fp:close()
+
+    return failed_tests
   end
 
   -- Pass out API

@@ -9,7 +9,7 @@
     make test
 
 
-### To run tests on windows 
+### To run tests on windows using MSYS
 
     mkdir build
     cd build
@@ -17,8 +17,22 @@
     make
     make test
 
-...or if you have a copy of visual studio, just use the cmake-gui 
-and then choose 'build' on the ALL_TESTS project.
+### To run tests on windows using visual studio
+
+    create a sub directory called 'build'
+    run the cmake-gui
+    select source 'moai-lua-tests'
+    select build 'moai-lua-tests/build'
+    hit configure
+    from the 'Build' section, untick 'BUILD_WARNINGS'
+    hit generate
+    open the solution file in VS
+    view output
+    build RUN_TESTS
+    
+This should also create a binary called "luatest.exe" in the build
+directory. Invoking this will 1) regenerate the vs project and 2)
+run the main.lua in src/
 
 ### Notes
 

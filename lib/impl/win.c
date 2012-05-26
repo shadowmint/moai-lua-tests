@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-#include <auto/tools.h>
-#include <auto/impl.h>
-#include <stdlib.h>
+#include <auto/auto.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdarg.h>
-#include <signal.h>
+#include <windows.h>
+#include <process.h>
+#include <direct.h>
 
 /** Tracer */
 void auto_trace(char *format, ...) {
@@ -32,12 +31,12 @@ void auto_trace(char *format, ...) {
 
 /** Internal process struct */
 struct auto_process {
-  pid_t pid;
+  HANDLE pid;
 };
 
 /** Change to a specific directory */
 void auto_chdir(char *path) {
-  chdir(path);
+  _chdir(path);
 }
 
 /** Remove the file given by path */
@@ -47,7 +46,7 @@ void auto_remove(char *path) {
 
 /** Sleep for a specified number of microseconds */
 void auto_sleep(int msec) {
-  usleep(msec * 1000);
+  Sleep(msec);
 }
 
 /** Collect arguments */
@@ -56,13 +55,15 @@ char **auto_exec_args(char *command, va_list args) {
   char **argv;
   char *argn;
   int count; 
+  char buffer[2048];
 
   count = 0;
   argv = (char **) malloc(sizeof (char *) * 2);
   while((argn = va_arg(args, char *)) != NULL) {
     ++count;
-    argn = auto_strdup(argn);
-    argv = realloc(argv, sizeof(char *) * (2 + count));
+    sprintf_s(buffer, 2048, "\"%s\"", argn);
+    argn = auto_strdup(buffer);
+    argv = (char **) realloc(argv, sizeof(char *) * (2 + count));
     argv[count] = argn;
   }
 
@@ -73,15 +74,15 @@ char **auto_exec_args(char *command, va_list args) {
 }
 
 /** Execute a process and waits */
-struct auto_process *auto_execv(char *command, char *argv[]) {
+struct auto_process *auto_execv(char *command, char *argv[], int wait) {
 
   struct auto_process *ph;
-  pid_t pid; 
+  HANDLE pid; 
 
-  pid = fork();
-  if (pid == 0) {
-    execv(command, argv); 
-  }
+  if (wait)
+    _spawnv(_P_WAIT, command, (const char * const *) argv); 
+  else  
+    pid = (HANDLE) _spawnv(_P_NOWAIT, command, (const char * const *) argv); 
 
   ph = (struct auto_process *) malloc(sizeof(struct auto_process));
   ph->pid = pid;
@@ -94,15 +95,12 @@ void auto_exec_wait(char *command, ... /*, NULL */) {
 
   char **argv;
   va_list args;
-  struct auto_process *ph;
-  int stat_loc;
 
   va_start(args, command);
   argv = auto_exec_args(command, args);
   va_end(args);
 
-  ph = auto_execv(command, argv);
-  waitpid(ph->pid, &stat_loc, 0);
+  auto_execv(command, argv, 1);
 }
 
 /** Execute a process and return a process handle. */
@@ -116,12 +114,12 @@ void *auto_exec(char *command, ... /*, NULL */) {
   argv = auto_exec_args(command, args);
   va_end(args);
 
-  ph = auto_execv(command, argv);
+  ph = auto_execv(command, argv, 0);
   return ph;
 }
 
 /** Terminate a process from a process handle */
 void auto_kill(void *handle) {
   struct auto_process *ph = handle;
-  kill(ph->pid, SIGKILL);
+  TerminateProcess(ph->pid, 0);
 }

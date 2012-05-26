@@ -26,8 +26,8 @@ void auto_chdir(char *path);
 /** Remove the file given by path */
 void auto_remove(char *path);
 
-/** Sleep for a specified number of microseconds */
-void auto_sleep(int usec);
+/** Sleep for a specified number of milliseconds */
+void auto_sleep(int msec);
 
 /** 
  * Execute a process and wait for it to finish.

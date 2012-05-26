@@ -1,0 +1,49 @@
+package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
+
+-- Setup
+test_factory = require "n/test"
+test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
+
+-- This is a bit silly because we're testing we work with ourself,
+-- so if we dont work we probably incorrectly mark ourselves as
+-- working, but still...
+
+-- Setup
+function setup() 
+  local test_factory = require "n/test"
+  local test = test_factory("testing_test", "dummy_done.txt", "dummy_success.txt")
+  return test
+end
+
+-- Test that verify returns the correct status
+test.bind("test_verify_passes_on_success", function(t)
+  tt = setup()
+
+  tt.bind("test_isTrue", function(t) t.isTrue(true, "isTrue"); end)
+  tt.bind("test_isFalse", function(t) t.isFalse(false, "isFalse"); end)
+  tt.bind("test_isEqual", function(t) t.isEqual(1, 1, "isEqual"); end)
+  tt.bind("test_isNotEqual", function(t) t.isNotEqual(1, 2, "isNotEqual"); end)
+  tt.bind("test_isNull", function(t) t.isNull(nil, "isNull"); end)
+  tt.bind("test_isNotNull", function(t) t.isNotNull(tt, "isNotNull"); end)
+
+  result = tt.verify()
+  t.isEqual(result, 0, "Expected no errors")
+end)
+
+-- Test that verify returns an error count on failure
+test.bind("test_verify_fails_on_errors", function(t)
+  tt = setup()
+
+  tt.bind("test_isTrue", function(t) t.isTrue(false, "failed isTrue"); end)
+  tt.bind("test_isFalse", function(t) t.isFalse(true, "failed isFalse"); end)
+  tt.bind("test_isEqual", function(t) t.isEqual(1, 2, "failed isEqual"); end)
+  tt.bind("test_isNotEqual", function(t) t.isNotEqual(1, 1, "failed isNotEqual"); end)
+  tt.bind("test_isNull", function(t) t.isNull(tt, "failed isNull"); end)
+  tt.bind("test_isNotNull", function(t) t.isNotNull(nil, "failed isNotNull"); end)
+
+  result = tt.verify()
+  t.isEqual(result, 6, "Incorrect error count")
+end)
+
+-- Done
+test.verify()
