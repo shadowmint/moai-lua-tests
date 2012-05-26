@@ -16,7 +16,9 @@
 -- <p>
 -- Assets are really just a top level container for any kind of object
 -- along with some tracking so we know who's using what assets.
-return function(_terminal) 
+-- Fetch asset instances from the AssetManager, and dispose of them
+-- using drop().
+return function(_manager, _data) 
 
   -- Check args
   local verify = function(name, value)
@@ -26,24 +28,22 @@ return function(_terminal)
     end
     return false
   end
-  if verify("_terminal", _terminal) then return nil end
+  if verify("_manager", _manager) then return nil end
+  if verify("_data", _data) then return nil end
+
+  -- Manager for this asset
+  local manager = _manager
 
   -- Public api
   local api = {}
 
-  -- Private api
-  local _api = {}
-
-  -- Terminal 
-  local term = _terminal
-
-  -- Top level dump of an object
-  api.dump = function(object)
+  -- This asset is no longer required here
+  api.drop = function()
+    manager.drop(api)
   end
 
-  -- Recursive dump of an object
-  api.rdump = function(object)
-  end
+  -- Actual asset data
+  api.data = _data
 
   return api
 end

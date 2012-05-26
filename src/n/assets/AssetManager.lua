@@ -14,7 +14,7 @@
 
 -- Looks after assets and loading assets.
 -- <p>
--- Use get() to fetch asset singletons and drop to give notice that
+-- Use get to fetch asset singletons and drop to give notice that
 -- you're not using the asset any more. 
 return function() 
 
