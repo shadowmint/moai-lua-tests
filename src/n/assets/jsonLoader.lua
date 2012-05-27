@@ -12,6 +12,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- Json loader
 return function() 
 
@@ -24,7 +26,16 @@ return function()
 
   -- load an actual object
   api.load = function(asset, path)
-    return nil
+  	local fh = io.open(path, "r")
+  	if (fh ~= nil) then
+      local content = ""
+      while true do
+        local line = fh.read(fh)
+        if not line then break end
+        content = content .. line
+      end 	
+      asset.data = MOAIJsonParser.decode(content)
+    end
   end
 
   return api

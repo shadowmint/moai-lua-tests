@@ -56,15 +56,15 @@ return function(_manager)
   
   -- Set a child asset by id
   api.set = function(id, value) 
- 	if (value) then
-	  	_api.childmeta.count = api.childmeta.count + 1
-	  	_api.children[id] = value
- 	else
- 		if (get(id) ~= nil) then
-		  	_api.childmeta.count = api.childmeta.count - 1
-		  	_api.children[id] = nil
- 		end
- 	end 
+   	if (value) then
+  	  	_api.childmeta.count = api.childmeta.count + 1
+  	  	_api.children[id] = value
+   	else
+   		if (get(id) ~= nil) then
+  		  	_api.childmeta.count = api.childmeta.count - 1
+  		  	_api.children[id] = nil
+   		end
+   	end 
   end
   
   -- Get a child asset by id

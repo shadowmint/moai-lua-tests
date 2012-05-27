@@ -18,3 +18,7 @@ Log.info("Demo: Loading config")
 assets = (require "n/assets/AssetManager")()
 cpath = require "demo/Config"
 config = assets.get(cpath)
+
+debug = (require "n/Debug")()
+Log.debug("id: " .. config.id)
+debug.dump(config.data)

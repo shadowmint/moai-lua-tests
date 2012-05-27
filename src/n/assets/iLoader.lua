@@ -41,6 +41,7 @@ return function(impl)
   api.load = function(manager, path)
   	local asset = manager.asset()
   	impl.load(asset, path)
+  	asset.id = path
     return asset
   end
 

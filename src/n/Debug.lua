@@ -15,18 +15,7 @@
 require "n/Log"
 
 -- Debugging tools
--- @param _terminal The terminal to log to
-return function(_terminal) 
-
-  -- Check args
-  local verify = function(name, value)
-    if (value == nil) then
-      Log.error("Debug: Invalid argument: " .. name)
-      return true
-    end
-    return false
-  end
-  if verify("_terminal", _terminal) then return nil end
+return function() 
 
   -- Public api
   local api = {}
@@ -34,11 +23,12 @@ return function(_terminal)
   -- Private api
   local _api = {}
 
-  -- Terminal 
-  local term = _terminal
-
   -- Top level dump of an object
   api.dump = function(object)
+    Log.debug("Dumping: " .. tostring(object))
+    for k,v in pairs(object) do
+      Log.debug("- " .. k .. " = " .. tostring(v))
+    end
   end
 
   -- Recursive dump of an object
