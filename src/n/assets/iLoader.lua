@@ -12,18 +12,24 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- Any asset loader should implement this interface.
-return function() 
+return function(impl) 
 
-  -- Public api
-  local api = {}
+  -- Apis
+  local _api = {}
+  local api = { ["_api"] = _api }
   
-  -- Implementation hook
-  api.impl = {
-  	["ext"] = nil, -- string function()
-  	["load"] = nil -- void function(asset, path) 
-  }
-
+  -- hook: return extension
+  _api.ext = function() 
+    return ""
+  end
+  
+  -- hook: load asset
+  _api.load = function(asset, path)
+  end
+  
   -- Return the extension that this loader is valid for.
   api.ext = function(object)
   	return api.impl.ext()
@@ -35,6 +41,17 @@ return function()
   api.load = function(manager, path)
   	local asset = manager.asset()
   	return impl.load()
+  end
+
+  -- Rebind implementation to hooks if possible
+  for k,v in pairs(_api) do
+    if (impl[k] == nil) then
+      Log.error("ILoader: Invalid implementation: Does not implement " .. k)
+      api = nil
+      break
+    else
+      _api[k] = impl[k]
+    end
   end
 
   return api

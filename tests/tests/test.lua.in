@@ -13,10 +13,12 @@
 -- limitations under the License.
 
 package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
+require "n/Log"
 
 -- Setup
 test_factory = require "n/Test"
 test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
+Log.setLogLevel(Log.DEBUG)
 
 -- This is a bit silly because we're testing we work with ourself,
 -- so if we dont work we probably incorrectly mark ourselves as

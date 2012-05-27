@@ -20,15 +20,41 @@ test_factory = require "n/Test"
 test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
 Log.setLogLevel(Log.DEBUG)
 
--- Attach helper
-function add_tests(name)
-  tests = (loadstring("return require \"" .. name .. "\""))()
-  test.bindTests(name .. "__", tests)
-end
+test.bind("test_can_import_log", function(t)
+  require "n/Log"
+  t.isNotNull(Log, "Did not manage to bind the global logger")
+end)
 
--- Attach tests
-add_tests("AssetTests")
-add_tests("AssetManagerTests")
+test.bind("test_can_log_info", function(t)
+  require "n/Log"
+  Log.info("Hello info")
+end)
+
+test.bind("test_can_log_error", function(t)
+  require "n/Log"
+  Log.error("Hello error")
+end)
+
+test.bind("test_can_log_debug", function(t)
+  require "n/Log"
+  Log.debug("Hello debug")
+end)
+
+test.bind("test_can_log_to_terminal", function(t)
+  require "n/Log"
+
+  MOAISim.openWindow ("test", 512, 512)
+  local factory = require "n/Terminal"
+  local terminal = factory(512, 512, "assets/Roboto-Medium.ttf", 14, 10)
+
+  Log.setLogLevel(Log.DEBUG)
+  Log.setTerminal(terminal)
+  Log.debug("Hello debug")
+  Log.info("Hello info")
+  Log.error("Hello error")
+
+  terminal.destroy()
+end)
 
 -- Done
 test.verify()

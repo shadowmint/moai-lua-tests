@@ -13,11 +13,13 @@
 -- limitations under the License.
 
 package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
+require "n/Log"
 
 -- Setup
 test_factory = require "n/Test"
 test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
 MOAISim.openWindow ("test", 512, 512)
+Log.setLogLevel(Log.DEBUG)
 
 -- Instance
 function setup() 

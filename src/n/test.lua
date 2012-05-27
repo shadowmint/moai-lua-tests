@@ -12,13 +12,15 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- Testing helper
 return function(_name, _done, _success)
    
   -- Check args
   local verify = function(name, value)
     if (value == nil) then
-      print("Test: Invalid argument: " .. name)
+      Log.error("Test: Invalid argument: " .. name)
       return true
     end
     return false
@@ -155,33 +157,33 @@ return function(_name, _done, _success)
     os.remove(successPath)
 
     -- Run tests
-    print("\nRunning tests: " .. name)
+    Log.info("\nRunning tests: " .. name)
     local failed = false
     for k, v in pairs(tests) do
-      print("running: " .. v.name)
+      Log.info("running: " .. v.name)
       currentTest = v
       v.request(pubTester);
     end
 
     -- Print summary
-    print("\nTest summary:")
+    Log.info("\nTest summary:")
     failed_tests = 0
     for k, v in pairs(tests) do
       if (v.errorCount > 0) then
-        print("\n" .. v.name .. " failed with " .. v.errorCount .. " errors")
+        Log.info("\n" .. v.name .. " failed with " .. v.errorCount .. " errors")
         for ek, ev in pairs(v.errors) do
-          print("- " .. ev)
+          Log.info("- " .. ev)
           failed = true
         end
         failed_tests = failed_tests + 1
       else
-        print(v.name .. " passed")
+        Log.info(v.name .. " passed")
       end
     end
     if (not failed) then
-      print("\n" .. name .. " PASSED\n")
+      Log.info("\n" .. name .. " PASSED\n")
     else
-      print("\n" .. name .. " FAILED\n")
+      Log.info("\n" .. name .. " FAILED\n")
     end
 
     -- Generate test result file

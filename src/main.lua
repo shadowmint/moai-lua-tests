@@ -13,7 +13,10 @@
 -- limitations under the License.
 
 -- Setup
+require "n/Log"
 MOAISim.openWindow ( "test", 512, 512 )
+Log.setLogLevel(Log.DEBUG)
 
 -- Open debug terminal
 require "demo/Terminal"
+Log.info("Loaded! Ready~")

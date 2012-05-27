@@ -12,35 +12,19 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Debugging tools
--- @param _terminal The terminal to log to
-return function(_terminal) 
+-- Json loader
+return function() 
 
-  -- Check args
-  local verify = function(name, value)
-    if (value == nil) then
-      print("Debug: Invalid argument: " .. name)
-      return true
-    end
-    return false
-  end
-  if verify("_terminal", _terminal) then return nil end
-
-  -- Public api
   local api = {}
 
-  -- Private api
-  local _api = {}
-
-  -- Terminal 
-  local term = _terminal
-
-  -- Top level dump of an object
-  api.dump = function(object)
+  -- extensions for this type
+  api.ext = function()
+    return "json"
   end
 
-  -- Recursive dump of an object
-  api.rdump = function(object)
+  -- load an actual object
+  api.load = function(asset, path)
+    return nil
   end
 
   return api

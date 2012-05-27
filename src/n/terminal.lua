@@ -12,6 +12,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- Terminal emulator
 -- @param _width The width in units for the text area.
 -- @param _height The height in units for the text area.
@@ -23,7 +25,7 @@ return function(_width, _height, _fontPath, _fontSize, _maxLines)
   -- Check args
   local verify = function(name, value)
     if (value == nil) then
-      print("Terminal: Invalid argument: " .. name)
+      Log.error("Terminal: Invalid argument: " .. name)
       return true
     end
     return false

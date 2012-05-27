@@ -18,14 +18,30 @@
 -- you're not using the asset any more. 
 return function() 
 
-  -- Public api
-  local api = {}
-
   -- Private api
   local _api = {}
   
+  -- Public api
+  local api = { ["_api"] = _api }
+
   -- Local asset factory
-  local asset_factory = require "n/assets/Asset";
+  _api.asset_factory = require "n/assets/Asset";
+
+  -- Set of loaders
+  _api.loaders = {}
+
+  -- Setup various asset loaders
+  _api.setup = function() 
+    local lf = require "n/assets/ILoader"
+    local l = {}
+    table.insert(l, (require "n/assets/JsonLoader")())
+    for k,v in pairs(l) do
+      local loader = lf(v)
+      if (loader ~= nil) then
+        _api.loaders[v.ext()] = v
+      end
+    end
+  end
 
   -- Request an asset by path
   -- <p>
@@ -44,9 +60,10 @@ return function()
   
   -- Return a new blank asset
   api.asset = function()
-  	local rtn = asset_factory(api)
+  	local rtn = _api.asset_factory(api)
   	return rtn
   end
 
+  _api.setup()
   return api
 end

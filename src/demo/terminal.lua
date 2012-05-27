@@ -13,8 +13,10 @@
 -- limitations under the License.
 
 -- Setup
+require "n/Log"
 terminal_factory = require "n/terminal"
 terminal = terminal_factory(512, 512, "assets/Roboto-Medium.ttf", 13, 30)
+Log.setTerminal(terminal)
 
 -- Help message
 terminal.attach("help", "show help message", function() 

@@ -12,17 +12,14 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Text loader
-return function() 
-
-  -- extensions for this type
-  api.ext = function()
-    return "json"
-  end
-
-  -- load an actual object
-  api.load = function(asset, path)
-  end
-
-  return api
+function setup()
+  -- require "..."
+  return {}
 end
+
+return {
+  ["test_can_create_instance"] = function(t)
+    local instance = setup()
+    t.isNotNull(instance)
+  end
+}

@@ -12,6 +12,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- A generic game asset of some type. 
 -- <p>
 -- Assets are really just a top level container for any kind of object
@@ -23,7 +25,7 @@ return function(_manager)
   -- Check args
   local verify = function(name, value)
     if (value == nil) then
-      print("Asset: Invalid argument: " .. name)
+      Log.error("Asset: Invalid argument: " .. name)
       return true
     end
     return false

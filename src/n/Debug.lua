@@ -12,6 +12,8 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+require "n/Log"
+
 -- Debugging tools
 -- @param _terminal The terminal to log to
 return function(_terminal) 
@@ -19,7 +21,7 @@ return function(_terminal)
   -- Check args
   local verify = function(name, value)
     if (value == nil) then
-      print("Debug: Invalid argument: " .. name)
+      Log.error("Debug: Invalid argument: " .. name)
       return true
     end
     return false
