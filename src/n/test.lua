@@ -138,7 +138,7 @@ return function(_name, _done, _success)
   -- the test set using the form bind(namespace .. name, function)
   -- @param namespace The namespace for this set of tests
   -- @param tests A table of tests
-  pub.bindSet = function(namespace, tests) 
+  pub.bindTests = function(namespace, tests) 
     for k,v in pairs(tests) do
       pub.bind(namespace .. k, v)
     end

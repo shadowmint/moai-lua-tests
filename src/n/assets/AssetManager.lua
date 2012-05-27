@@ -25,7 +25,7 @@ return function()
   local _api = {}
   
   -- Local asset factory
-  local asset_factory = require "assets/Asset";
+  local asset_factory = require "n/assets/Asset";
 
   -- Request an asset by path
   -- <p>
