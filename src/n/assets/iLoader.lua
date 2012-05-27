@@ -12,35 +12,29 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Debugging tools
--- @param _terminal The terminal to log to
-return function(_terminal) 
-
-  -- Check args
-  local verify = function(name, value)
-    if (value == nil) then
-      print("Debug: Invalid argument: " .. name)
-      return true
-    end
-    return false
-  end
-  if verify("_terminal", _terminal) then return nil end
+-- Any asset loader should implement this interface.
+return function() 
 
   -- Public api
   local api = {}
+  
+  -- Implementation hook
+  api.impl = {
+  	["ext"] = nil, -- string function()
+  	["load"] = nil -- void function(asset, path) 
+  }
 
-  -- Private api
-  local _api = {}
-
-  -- Terminal 
-  local term = _terminal
-
-  -- Top level dump of an object
-  api.dump = function(object)
+  -- Return the extension that this loader is valid for.
+  api.ext = function(object)
+  	return api.impl.ext()
   end
 
-  -- Recursive dump of an object
-  api.rdump = function(object)
+  -- Load the Asset for this loader and return it.
+  -- @param manager The asset manager
+  -- @param path The path to the asset
+  api.load = function(manager, path)
+  	local asset = manager.asset()
+  	return impl.load()
   end
 
   return api

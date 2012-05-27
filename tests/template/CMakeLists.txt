@@ -34,6 +34,7 @@ set(TEST_DONE_PATH "${TEST_PACKAGE_PATH}/${TEST_NAME}_done.txt")
 # Create application runner for this test application
 set(TEST_SOURCE "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}/runner.c")
 file(MAKE_DIRECTORY "${PROJECT_BINARY_DIR}/templates/${TEST_NAME}")
+configure_file(${PROJECT_TEST_TEMPLATE} ${TEST_SOURCE})
 add_executable("test-${TEST_NAME}" "${TEST_SOURCE}")
 target_link_libraries("test-${TEST_NAME}" ${AUTO_LIBRARIES})
 include_directories(${AUTO_INCLUDE_DIR})

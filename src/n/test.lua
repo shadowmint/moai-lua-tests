@@ -114,13 +114,12 @@ return function(_name, _done, _success)
   end
 
   -- Attach a named test
-  -- 
+  -- <p>
   -- The request must be a function in the form:
   -- function(tester) ... end
-  --
+  -- <p>
   -- Inside the test function any number of calls to
   -- tester.assert(condition, "error code") can be called.
-  --
   -- @param name The name of the test
   -- @param request The verifier function itself
   pub.bind = function(name, request) 
@@ -131,6 +130,18 @@ return function(_name, _done, _success)
       ["errors"] = {}
     }
     tests[name] = test
+  end
+
+  -- Attach a set of named tests
+  -- <p>
+  -- The set in the form { "name" = function } is attached to
+  -- the test set using the form bind(namespace .. name, function)
+  -- @param namespace The namespace for this set of tests
+  -- @param tests A table of tests
+  pub.bindSet = function(namespace, tests) 
+    for k,v in pairs(tests) do
+      pub.bind(namespace .. k, v)
+    end
   end
 
   -- Run all the tests and report back about how they went

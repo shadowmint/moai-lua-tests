@@ -23,6 +23,9 @@ return function()
 
   -- Private api
   local _api = {}
+  
+  -- Local asset factory
+  local asset_factory = require "assets/Asset";
 
   -- Request an asset by path
   -- <p>
@@ -37,6 +40,12 @@ return function()
 
   -- Prints a breakdown of loaded assets to the terminal
   api.breakdown = function(terminal)
+  end
+  
+  -- Return a new blank asset
+  api.asset = function()
+  	local rtn = asset_factory(api)
+  	return rtn
   end
 
   return api
