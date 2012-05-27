@@ -18,6 +18,12 @@ package.path = package.path .. ";@TEST_PACKAGE_PATH@/?.lua"
 test_factory = require "n/Test"
 test = test_factory("@TEST_NAME@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@")
 
+-- Attach helper
+function add_tests(name)
+  tests = (loadstring("return require \"" .. name .. "\""))()
+  test.bindTests(name .. "__", tests)
+end
+
 -- Test 1
 test.bind("example_test", function(t)
   t.isTrue(true, "True is true")
@@ -27,6 +33,9 @@ end)
 test.bind("example_test_2", function(t)
   t.isTrue(true, "True is true")
 end)
+
+-- Attach test set
+add_tests("TargetTests")
 
 -- Done
 test.verify()

@@ -59,5 +59,24 @@ test.bind("test_verify_fails_on_errors", function(t)
   t.isEqual(result, 6, "Incorrect error count")
 end)
 
+-- Test that bind tests work
+test.bind("test_can_bind_test_set", function(t)
+  tt = setup()
+
+  tests = {
+    ["test_isTrue"] = function(t) t.isTrue(false, "failed isTrue"); end,
+    ["test_isFalse"] = function(t) t.isFalse(true, "failed isFalse"); end,
+    ["test_isEqual"] = function(t) t.isEqual(1, 2, "failed isEqual"); end,
+    ["test_isNotEqual"] = function(t) t.isNotEqual(1, 1, "failed isNotEqual"); end,
+    ["test_isNull"] = function(t) t.isNull(tt, "failed isNull"); end,
+    ["test_isNotNull"] = function(t) t.isNotNull(nil, "failed isNotNull"); end
+  }
+
+  tt.bindTests("NS__", tests)
+
+  result = tt.verify()
+  t.isEqual(result, 6, "Incorrect error count")
+end)
+
 -- Done
 test.verify()
