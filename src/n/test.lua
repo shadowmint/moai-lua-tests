@@ -149,9 +149,6 @@ return function(_name, _done, _success)
   -- Run all the tests and report back about how they went
   pub.verify = function() 
 
-    -- Force output
-    io.stdout:setvbuf("no")
-
     -- Cleanup success marker
     os.remove(donePath)
     os.remove(successPath)

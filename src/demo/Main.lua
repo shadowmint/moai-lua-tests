@@ -12,11 +12,9 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
--- Setup
 require "n/Log"
-MOAISim.openWindow ( "test", 512, 512 )
-Log.setLogLevel(Log.DEBUG)
 
--- GO!
-require "demo/Terminal"
-require "demo/Main"
+Log.info("Demo: Loading config")
+assets = (require "n/assets/AssetManager")()
+cpath = require "demo/Config"
+config = assets.get(cpath)

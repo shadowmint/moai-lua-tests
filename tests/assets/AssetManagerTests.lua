@@ -22,5 +22,15 @@ return {
   ["test_can_create_instance"] = function(t)
     local instance = setup()
     t.isNotNull(instance)
+  end,
+
+  ["test_cannot_load_missing_file"] = function(t)
+    local instance = setup()
+
+    local asset = instance.get("dummy_file.json")
+    t.isNull(asset)
+
+    asset = instance.get("dummy_file.BLAH")
+    t.isNull(asset)
   end
 }

@@ -70,6 +70,13 @@ local factory = function()
     _api.level = level
   end
 
+  -- Force output
+  -- <p>
+  -- Yes, this makes things slow. So turn logging off if you
+  -- dont like it. Buffering output so we never see it on errors
+  -- is stupid.
+  io.stdout:setvbuf("no")
+
   return api
 end
 

@@ -40,7 +40,8 @@ return function(impl)
   -- @param path The path to the asset
   api.load = function(manager, path)
   	local asset = manager.asset()
-  	return impl.load()
+  	impl.load(asset, path)
+    return asset
   end
 
   -- Rebind implementation to hooks if possible
