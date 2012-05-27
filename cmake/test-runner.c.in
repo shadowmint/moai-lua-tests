@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <auto/auto.h>
 #include <auto/impl.h>
 
@@ -33,6 +34,8 @@ int main(int argc, char *argv[]) {
   int rtn;
 
   init();
+  if ((argc == 2) && (strcmp(argv[1], "-r") == 0))
+    auto_rebuild();
   rtn = !auto_run_moai_test("@TEST_PROJECT_TARGET@", "@TEST_DONE_PATH@", "@TEST_SUCCESS_PATH@", 60000);
   auto_trace("\nDone.\n");
 
