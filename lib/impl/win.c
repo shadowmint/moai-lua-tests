@@ -61,7 +61,7 @@ char **auto_exec_args(char *command, va_list args) {
   argv = (char **) malloc(sizeof (char *) * 2);
   while((argn = va_arg(args, char *)) != NULL) {
     ++count;
-    sprintf_s(buffer, 2048, "\"%s\"", argn);
+    sprintf(buffer, "\"%s\"", argn);
     argn = auto_strdup(buffer);
     argv = (char **) realloc(argv, sizeof(char *) * (2 + count));
     argv[count] = argn;
